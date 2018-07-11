@@ -1,0 +1,10 @@
+{
+  "name": "DELIA",
+  "version": "1.0.0",
+  "description": "Plays musics and holds miscellaneous functions",
+  "main": "delia.js",
+  "author": "Derek E",
+  "dependencies": {
+    "discord.js": "^11.3.2"
+  }
+}
