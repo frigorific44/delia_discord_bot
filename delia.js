@@ -33,8 +33,8 @@ fs.readdir('./commands/', (err, files) => {
 
 client.on('ready', () => {
   console.log(`${client.user.username} is ready and online!`);
-  //client.user.setActivity('Global Thermonuclear War', {type: 'PLAYING'});
-  client.user.setActivity('Pinky and the Brain', {type: 'WATCHING'});
+  client.user.setActivity('Global Thermonuclear War', {type: 'PLAYING'});
+  //client.user.setActivity('Pinky and the Brain', {type: 'WATCHING'});
   //client.user.setActivity('consciousness', {type: 'STREAMING'});
 });
 
