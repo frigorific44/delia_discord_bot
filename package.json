@@ -5,6 +5,7 @@
   "main": "delia.js",
   "author": "Derek E",
   "dependencies": {
-    "discord.js": "^11.3.2"
+    "discord.js": "^11.3.2",
+    "mathjs": "^5.0.2"
   }
 }
