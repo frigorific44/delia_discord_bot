@@ -5,7 +5,7 @@ let half = ['half','some','1','withoutrole'];
 let full = ['full','all', '2','everybody'];
 
 module.exports.run = (client, message, args) => {
-  if (!message.member.hasPermission('', false, true, true)) {
+  if (!message.member.hasPermission('MANAGE_GUILD', false, true, true)) {
     message.channel.send('Oh dear, it seems that you have insufficient authority.');
   }
   else {
