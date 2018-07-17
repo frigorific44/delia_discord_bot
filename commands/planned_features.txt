@@ -1,7 +1,0 @@
-calculator - mathjs, though it presents security problems with execution of arbitrary expressions that I am unsure of
-me - provide info on the invoker
-info - provide info on the bot
-help, help command
-report
-kick - not sure about permission checking
-ban - not sure about permission checking
