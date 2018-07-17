@@ -5,6 +5,8 @@
   "main": "delia.js",
   "author": "Derek E",
   "dependencies": {
-    "discord.js": "^11.3.2"
+    "discord.js": "^11.3.2",
+    "node-opus": "^0.3.0",
+    "ytdl-core": "^0.20.4"
   }
 }
