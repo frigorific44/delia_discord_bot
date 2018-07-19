@@ -10,8 +10,8 @@ module.exports.run = (client, message, args) => {
   if (!message.member.hasPermission('MANAGE_GUILD', false, true, true)) {
     message.channel.send('Oh dear, it seems that you have insufficient authority.');
   }
-  else if (//bot permission) {
-
+  else if (/*bot permission*/false) {
+    return;
   }
   else {
     if (!args[0]) {
