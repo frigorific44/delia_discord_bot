@@ -1,10 +1,36 @@
 const Discord = require('discord.js');
 const ytdl = require('ytdl-core');
 
-function play(client, message, connection) {
+function getHHMMSS (sec_num) {
+  let hours   = Math.floor(sec_num / 3600) % 24;
+  let minutes = Math.floor(sec_num / 60) % 60;
+  let seconds = sec_num % 60;
+  return [hours,minutes,seconds]
+    .map(v => v < 10 ? "0" + v : v)
+    .filter((v,i) => v !== "00" || i > 0)
+    .join(":");
+}
+
+function play (client, message, connection) {
   let server = client.servers[message.guild.id];
 
-  server.dispatcher = connection.playStream(ytdl(server.playQueue[0], {filter: 'audioonly'}));
+  let url = server.playQueue[0];
+  let stream = ytdl(url, {filter: 'audioonly'});
+
+  stream.on('info', (info) => {
+    let ytEmbed = new Discord.RichEmbed();
+
+    ytEmbed.setThumbnail(info.thumbnail_url)
+    .setURL(url)
+    .setTitle(`${info.title}`)
+    .addField(`${info.author.name}`,'\u200B')
+    .addField('\u200B', getHHMMSS(info.length_seconds), true)
+    .addField('Requested by:', message.author.username, true);
+
+    message.channel.send(ytEmbed);
+  });
+
+  server.dispatcher = connection.playStream(stream);
   server.playQueue.shift();
 
   server.dispatcher.on("end", () => {
@@ -41,7 +67,7 @@ module.exports.run = (client, message, args) => {
         });
       }
       else {
-        play(message.guild.voiceConnection, message);
+        play(client, message, message.guild.voiceConnection);
       }
     }
     else {
