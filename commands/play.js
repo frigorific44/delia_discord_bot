@@ -25,7 +25,7 @@ function play (client, message, connection) {
     .setTitle(`${info.title}`)
     .addField(`${info.author.name}`,'\u200B')
     .addField('\u200B', getHHMMSS(info.length_seconds), true)
-    .addField('Requested by:', message.author.username, true);
+    .addField('Requested by:', message.member.nickname, true);
 
     message.channel.send(ytEmbed);
   });
