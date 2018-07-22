@@ -1,15 +1,14 @@
 const Discord = require('discord.js');
 const fs = require('fs');
 
-const auth = require('./auth.json');
 const settings = require('./settings.json');
 
 const client = new Discord.Client(/*options*/);// TODO: disable unnecessary events in the options for performance
+client.auth = require('./auth.json');
 client.commands = new Discord.Collection();
 client.settings = settings;
 client.servers = {};
 
-const token = auth.token;
 
 
 
@@ -59,4 +58,4 @@ client.on('message', async message => {
 });
 
 //Log the bot in
-client.login(token);
+client.login(client.auth.discord.token);
