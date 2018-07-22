@@ -19,13 +19,14 @@ function play (client, message, connection) {
 
   stream.on('info', (info) => {
     let ytEmbed = new Discord.RichEmbed();
+    let name = message.member.nickname ? message.member.nickname : message.author.username;
 
     ytEmbed.setThumbnail(info.thumbnail_url)
     .setURL(url)
     .setTitle(`${info.title}`)
     .addField(`${info.author.name}`,'\u200B')
     .addField('\u200B', getHHMMSS(info.length_seconds), true)
-    .addField('Requested by:', message.member.nickname, true);
+    .addField('Requested by:', name, true);
 
     message.channel.send(ytEmbed);
   });
