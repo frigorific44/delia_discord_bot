@@ -3,7 +3,7 @@ const fs = require('fs');
 
 const settings = require('./settings.json');
 
-const client = new Discord.Client(/*options*/);// TODO: disable unnecessary events in the options for performance
+const client = new Discord.Client({disabledEvents: ['TYPING_START']});// TODO: disable unnecessary events in the options for performance
 client.auth = require('./auth.json');
 client.commands = new Discord.Collection();
 client.settings = settings;
@@ -44,9 +44,10 @@ client.on('message', async message => {
   if (message.author.equals(client.user)) return;
   //if message is a direct message, ignore
   if (message.channel.type === 'dm') return;
-
   //if message does not start with the client's prefix, ignore
   if (!message.content.startsWith(settings.PREFIX)) return;
+  //if unable to reply in channel, ignore
+  if (!message.channel.permissionsFor(client.user).has('SEND_MESSAGES')) return;
 
   let args = message.content.substring(settings.PREFIX.length).trim().split(' ');
   let cmd = args.shift().toLowerCase();
@@ -55,6 +56,10 @@ client.on('message', async message => {
   if (cmdFile) {
     cmdFile.run(client, message, args);
   }
+});
+
+client.on('warn', info => {
+  console.log(info);
 });
 
 //Log the bot in
