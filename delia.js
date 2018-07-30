@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const fs = require('fs');
+const {google} = require('googleapis');
 
 const settings = require('./settings.json');
 
@@ -9,9 +10,11 @@ client.commands = new Discord.Collection();
 client.settings = settings;
 client.servers = {};
 
-
-
-
+const youtube = google.youtube({
+  version: 'v3',
+  auth: client.auth.google.yt_key
+});
+client.youtube = youtube
 
 
 fs.readdir('./commands/', (err, files) => {
