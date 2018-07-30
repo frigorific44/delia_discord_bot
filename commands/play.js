@@ -42,7 +42,7 @@ function play (client, message, connection) {
 
 module.exports.run = (client, message, args) => {
   if (!args[0]) {
-    message.channel.send('You have not provided anything to play.');
+    message.channel.send('You have not provided anything to play.').catch(console.error);
     return;
   }
   else if (!message.member.voiceChannel) {
@@ -60,21 +60,35 @@ module.exports.run = (client, message, args) => {
       client.servers[message.guild.id].playQueue = [];
     }
 
-    if (ytdl.validateURL(args[0])) {
-      client.servers[message.guild.id].playQueue.push(args[0]);
-      if(!message.guild.voiceConnection) {
-        message.member.voiceChannel.join().then( connection => {
-          play(client, message, connection);
-        });
-      }
-      else {
-        play(client, message, message.guild.voiceConnection);
-      }
+    function playContext(link) {
+      if (ytdl.validateURL(link)) return 'yt';
+
+      else return 'other';
     }
-    else {
-      //Search the args and take the first result
-      // // IDEA: Allow servers to set a default preferred search, like Soundcloud instead of YouTube
-      return;
+
+    switch (playContext(args[0])) {
+      case 'yt':
+        client.servers[message.guild.id].playQueue.push(args[0]);
+        if(!message.guild.voiceConnection) {
+          message.member.voiceChannel.join().then( connection => {
+            play(client, message, connection);
+          });
+        }
+        break;
+
+      default:
+        client.youtube.search.list({
+          part: 'id',
+          q: args.join(' '),
+          maxResults: 1
+        }).then( res => {
+          client.servers[message.guild.id].playQueue.push(`https://youtu.be/${res.data.items[0].id.videoId}`);
+          if(!message.guild.voiceConnection) {
+            message.member.voiceChannel.join().then( connection => {
+              play(client, message, connection);
+            });
+          }
+        }).catch(console.error);
     }
   }
 };
