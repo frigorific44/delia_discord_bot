@@ -6,6 +6,7 @@
   "author": "Derek E",
   "dependencies": {
     "discord.js": "^11.3.2",
+    "googleapis": "^32.0.0",
     "node-opus": "^0.3.0",
     "oxford-dictionary": "^1.4.1",
     "ytdl-core": "^0.20.4"
