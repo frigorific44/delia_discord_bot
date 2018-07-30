@@ -16,30 +16,34 @@ module.exports.run = (client, message, args) => {
 
     var lookup = dict.find(args[0]);
 
-    lookup.then( (res, err) => {
-      if (err) {
-        //console.log(err);
-      }
-      else {
-        let defEmbed = new Discord.RichEmbed();
-        defEmbed.addField(`*${res.results[0].word}*`, '\u200B');// IDEA: setAuthor may prove better
+    lookup.then( res => {
+      let defEmbed = new Discord.RichEmbed();
+      defEmbed.addField(`*${res.results[0].word}*`, '\u200B');// IDEA: setAuthor may prove better
 
-        res.results[0].lexicalEntries.forEach( category => {
-          let def_body = '\u200B';
-          let def_num = 1;
-          category.entries.forEach( entry => {
-            entry.senses.forEach( sense => {
+      res.results[0].lexicalEntries.forEach( category => {
+        let def_body = '\u200B';
+        let def_num = 1;
+        category.entries.forEach( entry => {
+          entry.senses.forEach( sense => {
+            if (sense.definitions) {
               def_body += `__${def_num}__` + '. ' + sense.definitions[0] + '\n';
               def_num++;
-            });
+            }
           });
-
-          defEmbed.addField(category.lexicalCategory, def_body);
-          //console.log(category);
         });
 
-        message.channel.send(defEmbed);
+        defEmbed.addField(category.lexicalCategory, def_body);
+      });
+
+      message.channel.send(defEmbed);
+    }).catch( err => {
+      if (err == 'No such entry found.') {
+        message.channel.send('Sorry, no such entry was found.')
       }
+      else if (err.status_code === 500) {
+        message.channel.send('An error occurred while processing the data. What did you do?')
+      }
+      console.error(err);
     });
   }
 }
