@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-//// TODO: name is dice.js instead?
+// IDEA: name is dice.js instead?
 module.exports.run = async (client, message, args) => {
   if (!args[0]) {
     message.channel.send('I must know the number of sides you wish for before I can summon a die to roll.');
