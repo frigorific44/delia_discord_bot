@@ -1,44 +1,35 @@
 const Discord = require('discord.js');
 const ytdl = require('ytdl-core');
+const music = require('../music.js');
 
-function getHHMMSS (sec_num) {
-  let hours   = Math.floor(sec_num / 3600) % 24;
-  let minutes = Math.floor(sec_num / 60) % 60;
-  let seconds = sec_num % 60;
-  return [hours,minutes,seconds]
-    .map(v => v < 10 ? "0" + v : v)
-    .filter((v,i) => v !== "00" || i > 0)
-    .join(":");
-}
-
-function play (client, message, connection) {
-  let server = client.servers[message.guild.id];
-
-  let url = server.playQueue[0];
-  let stream = ytdl(url, {filter: 'audioonly'});
-
-  stream.on('info', (info) => {
-    let ytEmbed = new Discord.RichEmbed();
-    let name = message.member.nickname ? message.member.nickname : message.author.username;
-
-    ytEmbed.setThumbnail(info.thumbnail_url)
-    .setURL(url)
-    .setTitle(`${info.title}`)
-    .addField(`${info.author.name}`,'\u200B')
-    .addField('\u200B', getHHMMSS(info.length_seconds), true)
-    .addField('Requested by:', name, true);
-
-    message.channel.send(ytEmbed);
-  });
-
-  server.dispatcher = connection.playStream(stream);
-  server.playQueue.shift();
-
-  server.dispatcher.on("end", () => {
-    if (server.playQueue[0]) play(client, message, connection);
-    else connection.disconnect();// IDEA: delayed disconnect so if song added soon, no in and out of voice channel
-  });
-}
+// function play (client, message, connection) {
+//   let server = client.servers[message.guild.id];
+//
+//   let url = server.playQueue[0];
+//   let stream = ytdl(url, {filter: 'audioonly'});
+//
+//   stream.on('info', (info) => {
+//     let ytEmbed = new Discord.RichEmbed();
+//     let name = message.member.nickname ? message.member.nickname : message.author.username;
+//
+//     ytEmbed.setThumbnail(info.thumbnail_url)
+//     .setURL(url)
+//     .setTitle(`${info.title}`)
+//     .addField(`${info.author.name}`,'\u200B')
+//     .addField('\u200B', getHHMMSS(info.length_seconds), true)
+//     .addField('Requested by:', name, true);
+//
+//     message.channel.send(ytEmbed);
+//   });
+//
+//   server.dispatcher = connection.playStream(stream);
+//   server.playQueue.shift();
+//
+//   server.dispatcher.on("end", () => {
+//     if (server.playQueue[0]) play(client, message, connection);
+//     else connection.disconnect();// IDEA: delayed disconnect so if song added soon, no in and out of voice channel
+//   });
+// }
 
 module.exports.run = (client, message, args) => {
   if (!args[0]) {
@@ -71,7 +62,7 @@ module.exports.run = (client, message, args) => {
         client.servers[message.guild.id].playQueue.push(args[0]);
         if(!message.guild.voiceConnection) {
           message.member.voiceChannel.join().then( connection => {
-            play(client, message, connection);
+            music.play.yt(client, message, connection);
           });
         }
         break;
@@ -85,7 +76,7 @@ module.exports.run = (client, message, args) => {
           client.servers[message.guild.id].playQueue.push(`https://youtu.be/${res.data.items[0].id.videoId}`);
           if(!message.guild.voiceConnection) {
             message.member.voiceChannel.join().then( connection => {
-              play(client, message, connection);
+              music.play.yt(client, message, connection);
             });
           }
         }).catch(console.error);
