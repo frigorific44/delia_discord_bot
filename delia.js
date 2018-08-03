@@ -8,7 +8,7 @@ const client = new Discord.Client({disabledEvents: ['TYPING_START']});// TODO: d
 client.auth = require('./auth.json');
 client.commands = new Discord.Collection();
 client.settings = settings;
-client.servers = {};
+client.servers = new Map();
 
 const youtube = google.youtube({
   version: 'v3',

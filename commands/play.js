@@ -42,13 +42,14 @@ module.exports.run = (client, message, args) => {
   }
   else {
     // IDEA: Add option for something that looks like a link but is invalid (might message that link is invalid)
-    if (!client.servers[message.guild.id]) {
-      client.servers[message.guild.id] = {
-        playQueue : []
-      }
+    let server = client.servers.get(message.guild.id);
+    if (!server) {
+      client.servers.set(message.guild.id, {
+        playQueue: []
+      });
     }
-    else if (!client.servers[message.guild.id].playQueue) {
-      client.servers[message.guild.id].playQueue = [];
+    else if (!server.playQueue) {
+      server.playQueue = [];
     }
 
     function playContext(link) {
@@ -59,12 +60,7 @@ module.exports.run = (client, message, args) => {
 
     switch (playContext(args[0])) {
       case 'yt':
-        client.servers[message.guild.id].playQueue.push(args[0]);
-        if(!message.guild.voiceConnection) {
-          message.member.voiceChannel.join().then( connection => {
-            music.play.yt(client, message, connection);
-          });
-        }
+        music.enqueuePlayEntry(client, message, new music.PlayEntry(args[0], 'yt'));
         break;
 
       default:
@@ -73,12 +69,7 @@ module.exports.run = (client, message, args) => {
           q: args.join(' '),
           maxResults: 1
         }).then( res => {
-          client.servers[message.guild.id].playQueue.push(`https://youtu.be/${res.data.items[0].id.videoId}`);
-          if(!message.guild.voiceConnection) {
-            message.member.voiceChannel.join().then( connection => {
-              music.play.yt(client, message, connection);
-            });
-          }
+          music.enqueuePlayEntry(client, message, new music.PlayEntry(`https://youtu.be/${res.data.items[0].id.videoId}`, 'yt'));
         }).catch(console.error);
     }
   }
