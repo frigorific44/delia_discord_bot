@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const fs = require('fs');
+const RC = require('reaction-core');
 const {google} = require('googleapis');
 
 const settings = require('./settings.json');
@@ -9,6 +10,7 @@ client.auth = require('./auth.json');
 client.commands = new Discord.Collection();
 client.settings = settings;
 client.servers = new Map();
+client.rHandler = new RC.Handler();
 
 const youtube = google.youtube({
   version: 'v3',
@@ -38,6 +40,7 @@ client.on('ready', () => {
   console.log(`${client.user.username} is ready and online!`);
   client.user.setActivity('Global Thermonuclear War', {type: 'PLAYING'});
   //client.user.setActivity('Pinky and the Brain', {type: 'WATCHING'});
+  //client.user.setActivity('the wails of the deceased', {type: 'LISTENING'})
   //client.user.setActivity('consciousness', {type: 'STREAMING'});
 });
 
@@ -60,6 +63,8 @@ client.on('message', async message => {
     cmdFile.run(client, message, args);
   }
 });
+
+client.on('messageReactionAdd', (messageReaction, user) => client.rHandler.handle(messageReaction, user));
 
 client.on('warn', info => {
   console.log(info);

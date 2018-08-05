@@ -9,6 +9,7 @@
     "googleapis": "^32.0.0",
     "node-opus": "^0.3.0",
     "oxford-dictionary": "^1.4.1",
+    "reaction-menu": "^2.0.4",
     "ytdl-core": "^0.20.4"
   }
 }

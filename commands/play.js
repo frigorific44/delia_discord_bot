@@ -2,34 +2,6 @@ const Discord = require('discord.js');
 const ytdl = require('ytdl-core');
 const music = require('../music.js');
 
-// function play (client, message, connection) {
-//   let server = client.servers[message.guild.id];
-//
-//   let url = server.playQueue[0];
-//   let stream = ytdl(url, {filter: 'audioonly'});
-//
-//   stream.on('info', (info) => {
-//     let ytEmbed = new Discord.RichEmbed();
-//     let name = message.member.nickname ? message.member.nickname : message.author.username;
-//
-//     ytEmbed.setThumbnail(info.thumbnail_url)
-//     .setURL(url)
-//     .setTitle(`${info.title}`)
-//     .addField(`${info.author.name}`,'\u200B')
-//     .addField('\u200B', getHHMMSS(info.length_seconds), true)
-//     .addField('Requested by:', name, true);
-//
-//     message.channel.send(ytEmbed);
-//   });
-//
-//   server.dispatcher = connection.playStream(stream);
-//   server.playQueue.shift();
-//
-//   server.dispatcher.on("end", () => {
-//     if (server.playQueue[0]) play(client, message, connection);
-//     else connection.disconnect();// IDEA: delayed disconnect so if song added soon, no in and out of voice channel
-//   });
-// }
 
 module.exports.run = (client, message, args) => {
   if (!args[0]) {
