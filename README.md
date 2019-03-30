@@ -24,3 +24,11 @@ DELIA is a small bot for Discord, with miscellanious functionality, including ad
 As indicated, insert your own API keys for the placeholders. 
 
 # Usage
+
+1. First, to be able to interact with the bot, you'll have to invite it to a server on Discord. Navigate to https://discordapp.com/developers/applications/, and get your bot's client id. Then paste https://discordapp.com/oauth2/authorize?client_id=CLIENTID&scope=bot into your browser, replacing `CLIENTID` with your bot's client id from earlier.
+2. Then, once the bot is in your Discord server, make sure it has all the permissions it needs (this will essentially be full admin permission).
+3. Next, to run on a local server, use: `$ node delia.js`
+4. You should be good to go! Now you can type commands in your Discord server. Format commands at `!'command'`
+5. To find available commands and their arguments, you can take a look through the files in the `\commands` directory.
+
+For example: `!roll 20` rolls a twenty-sided dice and outputs the result into your server's chat. 
